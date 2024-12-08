@@ -1,9 +1,10 @@
 pipeline {
-    agent 'any'
-   /* tools {
-        jdk 'Java17'
-        maven 'Maven3'
-    }*/
+    agent any
+   tools {
+       maven 'apache-maven-3.9.9'
+       jdk 'OpenJDK-17' jdk 
+        
+    }
     environment {
 	    APP_NAME = "register-app-pipeline"
             RELEASE = "1.0.0"
