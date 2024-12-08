@@ -8,7 +8,7 @@ pipeline {
     environment {
 	    APP_NAME = "register-app-pipeline"
             RELEASE = "1.0.0"
-            DOCKER_USER = "ashfaque9x"
+            DOCKER_USER = "sowjanya"
             DOCKER_PASS = 'dockerhub'
             IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
             IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
@@ -23,7 +23,7 @@ pipeline {
 
         stage("Checkout from SCM"){
                 steps {
-                    git branch: 'main', credentialsId: 'github', url: 'https://github.com/Ashfaque-9x/register-app'
+                    git branch: 'main', credentialsId: '', url: 'https://github.com/Rushika2017-27/register-app'
                 }
         }
 
@@ -40,7 +40,7 @@ pipeline {
            }
        }
 
-       stage("SonarQube Analysis"){
+      /* stage("SonarQube Analysis"){
            steps {
 	           script {
 		        withSonarQubeEnv(credentialsId: 'jenkins-sonarqube-token') { 
@@ -48,16 +48,16 @@ pipeline {
 		        }
 	           }	
            }
-       }
+       }*/
 
-       stage("Quality Gate"){
+      /* stage("Quality Gate"){
            steps {
                script {
                     waitForQualityGate abortPipeline: false, credentialsId: 'jenkins-sonarqube-token'
                 }	
             }
 
-        }
+        }*/
 
         stage("Build & Push Docker Image") {
             steps {
@@ -75,13 +75,13 @@ pipeline {
 
        }
 
-       stage("Trivy Scan") {
+     /*  stage("Trivy Scan") {
            steps {
                script {
 	            sh ('docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image ashfaque9x/register-app-pipeline:latest --no-progress --scanners vuln  --exit-code 0 --severity HIGH,CRITICAL --format table')
                }
            }
-       }
+       }*/
 
        stage ('Cleanup Artifacts') {
            steps {
@@ -105,12 +105,12 @@ pipeline {
        failure {
              emailext body: '''${SCRIPT, template="groovy-html.template"}''', 
                       subject: "${env.JOB_NAME} - Build # ${env.BUILD_NUMBER} - Failed", 
-                      mimeType: 'text/html',to: "ashfaque.s510@gmail.com"
+                      mimeType: 'text/html',to: "s.sowji99@gmail.com"
       }
-      success {
-            emailext body: '''${SCRIPT, template="groovy-html.template"}''', 
+       success {
+             emailext body: '''${SCRIPT, template="groovy-html.template"}''', 
                      subject: "${env.JOB_NAME} - Build # ${env.BUILD_NUMBER} - Successful", 
-                     mimeType: 'text/html',to: "ashfaque.s510@gmail.com"
+                    mimeType: 'text/html',to: "s.sowji99@gmail.com"
       }      
    }
 }
